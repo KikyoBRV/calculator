@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 
 
-class Keypad(tk.Frame):
+class Keypad_ui(tk.Frame):
     def __init__(self, parent, keynames=[], columns=1, **kwargs):
         super().__init__(parent, **kwargs)
         self.keynames = keynames
