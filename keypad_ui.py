@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from math import *
 
 
 class KeypadUI(tk.Frame):
@@ -37,7 +38,7 @@ class KeypadUI(tk.Frame):
 
         num_keys = self.keynames
         op_keys = ['DEL', 'CLR', '*', '/', '+', '-', '^', 'ln', 'log10',
-                   'log2', 'sqrt', '=']
+                   'log2', "(", ")", 'sqrt', '=']
         self.num_buttons = []
         self.op_buttons = []
 
@@ -133,9 +134,21 @@ class KeypadUI(tk.Frame):
 
     def update_display(self, text):
         current_text = self.display_label["text"]
-        if text == "":
-            # Clear the display if the button pressed is ""
+        if text not in ['DEL', 'CLR', '=']:
+            if text == "":
+                self.display_label["text"] = ""
+            if text == "ln":
+                self.display_label["text"] = current_text + "log"
+            else:
+                # Append the pressed key to the current text
+                self.display_label["text"] = current_text + text
+        if text ==  '=':
+            self.display_label["text"] = current_text + text \
+                                         + str(eval(current_text))
+        if text == 'DEL':
+            self.display_label["text"] = self.display_label["text"][:-1]
+        if text == "CLR":
             self.display_label["text"] = ""
-        else:
-            # Append the pressed key to the current text
-            self.display_label["text"] = current_text + text
+
+    def get_label(self):
+        return self.display_label['text']
