@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from keypad_cal import KeypadCal
 from math import *
 
 
@@ -20,11 +21,13 @@ class KeypadUI(tk.Frame):
         style = ttk.Style()
         style.configure("My1.TFrame", background="#CD5C5C")
         style.configure("My2.TFrame", background="#F08080")
-        style.configure("Display.TFrame", background="white")
+        style.configure("Display.TFrame", background="#FA8072")
         style.configure("My.TButton", background="violet", padding=(10, 20),
                         font=("Arial", 12))
-        style.configure("Color.TLabel", background="#FA8072",
+        style.configure("Display.TLabel", background="#FA8072",
                         foreground="black", font=("Arial", 36))
+        style.configure("History.TLabel", background="white",
+                        foreground="black", font=("Arial", 16))
 
         # create frame
         self.display_frame = ttk.Frame(relief="flat", style="Display.TFrame")
@@ -46,8 +49,13 @@ class KeypadUI(tk.Frame):
 
         # Display label
         self.display_label = ttk.Label(self.display_frame, text="", anchor="e",
-                                       style="Color.TLabel")
-        self.display_label.pack(fill=tk.BOTH, expand=True)
+                                       style="Display.TLabel")
+        self.display_label.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+        # History label
+        self.history_label = ttk.Label(self.display_frame, text="", anchor="e",
+                                       style="History.TLabel")
+        self.history_label.pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
 
         # create button for num_frame
         for i, key in enumerate(num_keys):
@@ -77,6 +85,10 @@ class KeypadUI(tk.Frame):
         self.op_frame.columnconfigure(0, weight=1)
         for i in range(len(op_keys)):
             self.op_frame.rowconfigure(i, weight=1)
+
+        # display_frame's row&column configure
+        self.display_frame.rowconfigure(0, weight=1)
+        self.display_frame.rowconfigure(1, weight=1)
 
     def bind(self, sequence=None, func=None, add=None):
         """Bind an event handler to an event sequence."""
@@ -139,11 +151,15 @@ class KeypadUI(tk.Frame):
                 self.display_label["text"] = ""
             if text == "ln":
                 self.display_label["text"] = current_text + "log"
+            if text == "^":
+                self.display_label["text"] = current_text + "**"
             else:
                 # Append the pressed key to the current text
                 self.display_label["text"] = current_text + text
         if text ==  '=':
             self.display_label["text"] = current_text + text \
+                                         + str(eval(current_text))
+            self.history_label["text"] = current_text + text \
                                          + str(eval(current_text))
         if text == 'DEL':
             self.display_label["text"] = self.display_label["text"][:-1]
