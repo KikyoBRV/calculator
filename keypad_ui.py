@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 
 
-class Keypad_ui(tk.Frame):
+class KeypadUI(tk.Frame):
     def __init__(self, parent, keynames=[], columns=1, **kwargs):
         super().__init__(parent, **kwargs)
         self.keynames = keynames
@@ -36,7 +36,8 @@ class Keypad_ui(tk.Frame):
         self.op_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
         num_keys = self.keynames
-        op_keys = ['*', '/', '+', '-', '^', '=']
+        op_keys = ['DEL', 'CLR', '*', '/', '+', '-', '^', 'ln', 'log10',
+                   'log2', 'sqrt', '=']
         self.num_buttons = []
         self.op_buttons = []
 
@@ -63,7 +64,7 @@ class Keypad_ui(tk.Frame):
                                 style="My.TButton",
                                 command=lambda key=key: self.update_display(
                                     key))
-            button.grid(row=i, column=0, padx=5, pady=5, **options)
+            button.grid(row=(i//2), column=(i % 2), padx=5, pady=5, **options)
             self.op_buttons.append(button)
 
         # num_frame's row&column configure
